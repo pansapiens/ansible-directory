@@ -1,0 +1,9 @@
+# This is the playbook to configure workstation(s)
+---
+- name: apply common configuration to workstations
+  hosts: workstations
+  user: root
+
+  roles:
+    - common
+    - desktop

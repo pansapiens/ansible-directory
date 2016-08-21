@@ -1,0 +1,5 @@
+# here we assign variables to particular groups
+
+main_user: perry
+smartgit_version: 7_1_4
+crashplan_version: 4.7.0

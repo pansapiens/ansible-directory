@@ -1,0 +1,7 @@
+---
+# vars file for desktop
+
+main_user: perry
+smartgit_version: 7_1_4
+smartgit_checksum: 0fe66599da686ac6c525816c9cc5199a52de8538
+crashplan_version: 4.7.0

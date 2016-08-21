@@ -1,0 +1,5 @@
+# Ansible cruft
+*.retry
+
+# Pycharm stuff
+.idea

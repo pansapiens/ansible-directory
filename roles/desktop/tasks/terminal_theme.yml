@@ -1,0 +1,4 @@
+---
+
+- name: Set Gnome Terminal theme
+  shell: curl https://gist.githubusercontent.com/codeforkjeff/1397104/raw/e8f2793fa4185ef594b29b60b142f151de5d1484/solarize.sh | bash -s dark

@@ -1,0 +1,6 @@
+---
+
+- name: Install SmartGit DEB package
+  apt: deb="https://www.syntevo.com/static/smart/download/smartgit/smartgit-{{smartgit_version}}.deb"
+       checksum={{smartgit_checksum}}
+  become: yes

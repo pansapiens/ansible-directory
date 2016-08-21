@@ -1,0 +1,211 @@
+---
+# tasks file for desktop
+
+# Add repos
+- name: Add multiverse repo
+  apt_repository: repo="{{item}}" update_cache=false
+  when: ansible_distribution == 'Ubuntu'
+  with_items:
+    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+    - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}} multiverse'
+    - 'deb http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+    - 'deb-src http://archive.ubuntu.com/ubuntu {{ansible_distribution_release}}-updates multiverse'
+
+- name: Add Canonical Archive Repo
+  apt_repository: repo='deb http://archive.canonical.com/ {{ ansible_distribution_release }} partner' state=present filename='canonical-archive'
+
+- name: Add Java PPA (ppa:webupd8team/java)
+  apt_repository: repo='ppa:webupd8team/java'
+
+- name: Add Ubuntu Make PPA
+  apt_repository: repo='ppa:ubuntu-desktop/ubuntu-make'
+
+- name: Add Dropbox Repo
+  apt_repository: repo='deb http://linux.dropbox.com/ubuntu {{ ansible_distribution_release }} main' state=present filename='dropbox'
+
+- name: Add Google repo key
+  apt_key: url=https://dl.google.com/linux/linux_signing_key.pub
+
+- name: Add Google Chrome Repo
+  apt_repository: repo='deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' state=present filename='google-chrome'
+
+- name: Add Google Talk Plugin Repo
+  apt_repository: repo='deb http://dl.google.com/linux/talkplugin/deb/ stable main' state=present filename='google-talkplugin'
+
+- name: Add Spotify Repo
+  apt_repository: repo='deb http://repository.spotify.com stable non-free' state=present filename='spotify'
+
+#####
+
+- name: Update APT cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install base development/server packages
+  apt: pkg={{item}} state=present
+  with_items:
+    - mosh
+    - openssh-server
+    - samba
+    - samba-common
+    - smbclient
+    - samba-vfs-modules
+    - build-essential
+    - git
+    - python-pip
+    - python3-pip
+    - virtualenvwrapper
+    - ubuntu-make
+    - vim
+    - at
+    - aria2
+    - microcode.ctl
+    - intel-microcode
+    - ppa-purge
+    - python-dev
+    - python3-dev
+    - curl
+
+- name: Install desktop packages
+  apt: pkg={{item}} state=present
+  with_items:
+    - vlc
+    - gimp
+    - blender
+    - vim-gnome
+    - gparted
+    - nautilus-actions
+    - gksu
+    - ubuntu-restricted-extras
+    - humanity-icon-theme
+    - steam
+
+- name: Remove packages I don't use
+  apt: pkg={{item}} state=absent purge=yes
+  with_items:
+    - evolution
+    - rhythmbox
+    - empathy
+    - gnome-photos
+    - gnome-contacts
+    - gnome-calendar
+    - gnome-mines
+    - gnome-sudoku
+    - aisleriot
+    - totem
+    - deja-dup
+
+- name: Install Nvidia video driver
+  apt: pkg={{item}} state=present
+  with_items:
+    - nvidia-361
+    - nvidia-361-dev
+
+- name: Install the 'grin' tool
+  pip: name=grin state=latest
+  become: true
+
+- name: Make 'nodejs' should be 'node'
+  # sudo update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
+  alternatives: name=node
+                link=/usr/bin/node
+                path=/usr/bin/nodejs
+                priority=10
+
+- name: Add proper Node.js v6.x to repo list
+  shell: curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+
+- name: Install proper Node.js v6.x
+  apt: pkg=nodejs state=present
+
+- name: Don't ask questions when installing Java
+  shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+
+- name: Install Oracle Java 8
+  apt: pkg={{item}} state=present
+  with_items:
+    - oracle-java8-installer
+    - oracle-java8-set-default
+
+- name: Install Ubuntu Make from PPA
+  apt: pkg={{item}} state=present
+  with_items:
+    - ubuntu-make
+
+# Not doing this since the non-standard Mono seems to break some things sometimes
+# Mono
+# sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+# - apt_key: keyserver=keyserver.ubuntu.com id=3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+# echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+# sudo apt-get update
+# sudo apt-get install mono-complete
+
+# - name: Install Google Chrome
+#   command: wget -O /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; dpkg -i /tmp/google-chrome-stable_current_amd64.deb
+
+- name: Install Googe Chrome (stable)
+  apt: pkg={{item}} state=present
+  with_items:
+    - google-chrome-stable
+
+- name: Install Spotify
+  apt: pkg={{item}} state=present
+  with_items:
+    - spotify-client
+
+- name: Install Dropbox
+  apt: pkg={{item}} state=present
+  with_items:
+    - python-gpgme
+    - dropbox
+
+- name: Install Google Talk Plugin
+  apt: pkg={{item}} state=present
+  with_items:
+    - google-talkplugin
+
+- name: Create 'programs' dir
+  file: path=/home/{{main_user}}/programs
+        state=directory
+        mode="u+rwx,o-rwx"
+
+- stat: path=/home/{{main_user}}/programs/pycharm-professional
+  register: pycharm_directory
+
+#- name: Delete existing Pycharm Professional installation
+#  file: path=/home/{{main_user}}/programs/pycharm-professional
+#        state=absent
+#  when: pycharm_directory.stat.exists == True
+
+- name: Install PyCharm Professional via Ubuntu Make
+  shell: umake ide pycharm-professional /home/{{main_user}}/programs/pycharm-professional
+  when: pycharm_directory.stat.exists == False
+
+- stat: path=/home/{{main_user}}/programs/firefox-dev
+  register: firefoxdev_directory
+
+#- name: Delete existing Firefox Developer Edition installation
+#  file: path=/home/{{main_user}}/programs/firefox-dev
+#        state=absent
+#  when: firefoxdev_directory.stat.exists == True
+
+- name: Install Firefox Developer Edition via Ubuntu Make
+  shell: umake web firefox-dev --lang en-US /home/{{main_user}}/programs/firefox-dev
+  when: firefoxdev_directory.stat.exists == False
+
+- name: Remove system copy of Firefox
+  apt: pkg=firefox purge=yes state=absent
+
+# - stat: path=/home/{{main_user}}/programs/visual-studio-code
+#   register: vscode_directory
+# - name: Install Visual Studio Code via Ubuntu Make
+#   shell: umake ide visual-studio-code --accept-license $HOME/programs/visual-studio-code
+#   when: vscode_directory.stat.exists == False
+
+- name: Install Visual Studio Code via DEB package from Microsoft
+  apt: deb="https://go.microsoft.com/fwlink/?LinkID=760868"
+  become: yes
+
+- include: docker.yml
+- include: smartgit.yml
+- include: terminal_theme.yml
+# - include: crashplan.yml

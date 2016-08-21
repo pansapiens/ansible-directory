@@ -1,23 +1,44 @@
 # About This Repo #
-This is a skeleton of an Ansible home directory. You can control all of your application environments from this directory. If you work with multiple customers, you probably want to create a separate copy of this repo for each customer.
+This is a personal repo for setting up a freshly install Ubuntu Gnome
+desktop machine (currently 16.04). If you find is useful as a starting
+point for your own preferred setup ... then great !
 
-This repo was designed to help new Ansible users to get up and running quickly. Feel free to add to it and add additional tips and tricks. Pull requests welcome.
+This repo is based on this skeleton Ansible setup: https://github.com/mattjbarlow/ansible-directory
 
-# Ansible Tips #
-In your roles directory, type ansible-galaxy init <em>role_name</em> in order to generate an empty skeleton for a new role you are working on.
+# Installing Ansible #
+
+```
+sudo pip install -U pip
+
+# Stable version on pip
+sudo pip install -U ansible
+
+# Or the latest dev version from github
+sudo pip install -U git+git://github.com/ansible/ansible.git@devel
+```
+
+# Running the workstation playbook against localhost #
+
+```
+ansible-playbook -K -b -c local -i workstations workstations.yml
+```
+
+# Adding a new role #
+In your roles directory, type `ansible-galaxy init some_role_name` in order to generate an empty skeleton for a new role you are working on.
 
 Example:
-<pre>
+```
 ansible-galaxy init nginx
-</pre>
+```
 
 Check out [Ansible Examples](https://github.com/ansible/ansible-examples) for example playbooks.
 
 # Best Practices Directory Layout #
 
 Based on [Ansible Best Practices](https://docs.ansible.com/ansible/playbooks_best_practices.html#directory-layout)
+As implemented by: https://github.com/mattjbarlow/ansible-directory
 
-<pre>
+```
 production                # inventory file for production servers
 staging                   # inventory file for staging environment
 
@@ -56,5 +77,5 @@ roles/
     webtier/              # same kind of structure as "common" was above, done for the webtier role
     monitoring/           # ""
     fooapp/               # ""
-</pre>
+```
 

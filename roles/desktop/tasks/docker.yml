@@ -1,0 +1,17 @@
+---
+# Install Docker and Docker Compose
+
+- name: Install Docker and Docker Compose
+  shell: wget -qO- https://get.docker.com/ | sh
+
+- name: Install Docker Compose
+  pip: name={{item}} state=latest
+  with_items:
+    - pip
+    - docker-compose
+  become: true
+
+# sudo usermod -aG docker $USER
+- name: Add primary user to the 'docker' group
+  user: name={{main_user}} groups=docker append=yes
+
