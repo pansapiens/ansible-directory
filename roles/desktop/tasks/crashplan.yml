@@ -1,0 +1,19 @@
+---
+
+# TODO: Maybe use one of these ?
+# https://github.com/sibson/treasurebox/blob/master/ansible/roles/crashplan/tasks/main.yml
+# https://github.com/krisoijn/ansible-playbooks/blob/master/crashplan/playbooks/crashplan.yml
+
+#- name: Download CrashPlan
+#  get_url: url="https://download2.code42.com/installs/linux/install/CrashPlan/CrashPlan_{{crashplan_version}}_Linux.tgz"
+#           dest=/tmp/CrashPlan_{{crashplan_version}}_Linux.tgz
+#
+#- name: Uncompress Crashplan package
+#  unarchive: src=/tmp/CrashPlan_{{crashplan_version}}_Linux.tgz
+#             dest=/tmp/
+#
+# No non-interactive mode. We might need to use expect ?
+# http://docs.ansible.com/ansible/expect_module.html
+#
+#- name: Run Crashplan installer
+#  shell: chdir=/tmp/crashplan-install install.sh
