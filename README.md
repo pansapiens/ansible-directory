@@ -8,13 +8,20 @@ This repo is based on this skeleton Ansible setup: https://github.com/mattjbarlo
 # Installing Ansible #
 
 ```
+sudo apt install python-pip python-setuptools virtualenv libffi-dev libssl-dev git
+
 sudo pip install -U pip
 
-# Stable version on pip
+# Stable version from pip
 sudo pip install -U ansible
+```
 
-# Or the latest dev version from github
-sudo pip install -U git+git://github.com/ansible/ansible.git@devel
+## Alternative: Use the latest dev version from Github inside a virtualenv
+
+```
+virtualenv ~/.virtualenvs/ansible
+source ~/.virtualenvs/ansible/bin/activate
+pip install -U git+git://github.com/ansible/ansible.git@devel
 ```
 
 # Running the workstation playbook against localhost #

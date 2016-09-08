@@ -1,0 +1,13 @@
+---
+
+- stat: path=/home/{{main_user}}/programs/pycharm-professional
+  register: pycharm_directory
+
+#- name: Delete existing Pycharm Professional installation
+#  file: path=/home/{{main_user}}/programs/pycharm-professional
+#        state=absent
+#  when: pycharm_directory.stat.exists == True
+
+- name: Install PyCharm Professional via Ubuntu Make
+  shell: umake ide pycharm-professional /home/{{main_user}}/programs/pycharm-professional
+  when: pycharm_directory.stat.exists == False

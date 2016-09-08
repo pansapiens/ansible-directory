@@ -1,0 +1,19 @@
+---
+
+# - stat: path=/home/{{main_user}}/programs/visual-studio-code
+#   register: vscode_directory
+#
+# - name: Install Visual Studio Code via Ubuntu Make
+#   shell: umake ide visual-studio-code --accept-license $HOME/programs/visual-studio-code
+#   when: vscode_directory.stat.exists == False
+
+- name: Check if Visual Studio Code is installed
+  command: dpkg-query -W code
+  register: vscode_installed
+  failed_when: vscode_installed.rc > 1
+  changed_when: vscode_installed.rc == 1
+
+- name: Install Visual Studio Code via DEB package from Microsoft if not installed
+  apt: deb="https://go.microsoft.com/fwlink/?LinkID=760868"
+  become: yes
+  when: vscode_installed.rc != 0

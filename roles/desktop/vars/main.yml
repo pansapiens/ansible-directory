@@ -2,6 +2,6 @@
 # vars file for desktop
 
 main_user: perry
-smartgit_version: 7_1_4
-smartgit_checksum: sha1:0fe66599da686ac6c525816c9cc5199a52de8538
+smartgit_version: 8_0_0
+smartgit_checksum: sha1:fb06796934f19186931b8f6d8e515348622b23ff
 crashplan_version: 4.7.0

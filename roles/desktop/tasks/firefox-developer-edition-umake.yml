@@ -1,0 +1,16 @@
+---
+
+- stat: path=/home/{{main_user}}/programs/firefox-dev
+  register: firefoxdev_directory
+
+#- name: Delete existing Firefox Developer Edition installation
+#  file: path=/home/{{main_user}}/programs/firefox-dev
+#        state=absent
+#  when: firefoxdev_directory.stat.exists == True
+
+- name: Install Firefox Developer Edition via Ubuntu Make
+  shell: umake web firefox-dev --lang en-US /home/{{main_user}}/programs/firefox-dev
+  when: firefoxdev_directory.stat.exists == False
+
+# - name: Remove system copy of Firefox
+#   apt: pkg=firefox purge=yes state=absent

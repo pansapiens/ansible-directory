@@ -1,10 +1,21 @@
 ---
 # Install Docker and Docker Compose
 
-- name: Install Docker and Docker Compose
-  shell: wget -qO- https://get.docker.com/ | sh
+- name: Check if docker-engine is installed
+  command: dpkg-query -W docker-engine
+  register: docker_installed
+  failed_when: docker_installed.rc > 1
+  changed_when: docker_installed.rc == 1
 
-- name: Install Docker Compose
+- name: Install Docker if missing
+  shell: wget -qO- https://get.docker.com/ | sh
+  when: docker_installed.rc != 0
+
+- name: Update existing Docker installation if required
+  apt: name=docker-engine update_cache=yes only_upgrade=yes
+  become: yes
+
+- name: Install / update Docker Compose
   pip: name={{item}} state=latest
   with_items:
     - pip
