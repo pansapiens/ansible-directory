@@ -1,0 +1,15 @@
+- name: Add Openshot ppa repo key
+  apt_key: id='B9BA26FA' keyserver='keyserver.ubuntu.com'
+
+- name: Add Openshot PPA
+  apt_repository: repo='ppa:openshot.developers/ppa'
+                  codename='{{ ubuntu_release }}'
+  # command: apt-add-repository -y ppa:openshot.developers/ppa
+
+- name: Update APT cache
+  apt: update_cache=yes
+
+- name: Install Openshot
+  apt: pkg={{item}} state=present
+  with_items:
+    - openshot-qt

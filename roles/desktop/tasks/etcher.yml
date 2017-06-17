@@ -1,0 +1,21 @@
+# https://github.com/resin-io/etcher#debian-and-ubuntu-based-package-repository-gnulinux-x86x64
+
+# sudo apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 379CE192D401AB61
+- name: Add Etcher repo key
+  apt_key: id='379CE192D401AB61' keyserver='pgp.mit.edu'
+
+# sudo echo "deb https://dl.bintray.com/resin-io/debian stable etcher" >/etc/apt/sources.list.d/etcher.list
+- name: Add Etcher repo
+  apt_repository: repo='deb https://dl.bintray.com/resin-io/debian stable etcher'
+                  state=present
+                  filename='etcher'
+
+# sudo apt-get update
+- name: Update APT cache
+  apt: update_cache=yes
+
+# sudo apt-get install etcher-electron
+- name: Install Etcher
+  apt: pkg={{item}} state=present
+  with_items:
+    - etcher-electron

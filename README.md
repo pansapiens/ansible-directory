@@ -27,7 +27,8 @@ ansible-playbook -K -b -c local -i workstations workstations.yml
 # Running the workstation playbook against localhost #
 
 ```
-ansible-playbook -b -c local -i workstations workstations.yml
+ansible-galaxy install -r requirements.yml
+ansible-playbook -K -b -c local -i workstations workstations.yml
 ```
 
 # Adding a new role #

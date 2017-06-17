@@ -1,0 +1,6 @@
+---
+
+- name: Install GitKraken DEB package
+  apt: deb="https://release.gitkraken.com/linux/gitkraken-amd64.deb"
+  become: yes
+  ignore_errors: yes

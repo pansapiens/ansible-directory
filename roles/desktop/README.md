@@ -18,6 +18,7 @@ In `vars/main.yml`
 `smartgit_version`
 `smartgit_checksum`
 `crashplan_version`
+`jetbrains_toolbox_version`
 
 Dependencies
 ------------

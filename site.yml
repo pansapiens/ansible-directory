@@ -10,4 +10,6 @@
 
   roles:
     - common
+    - nlap.graph_tool
+
 

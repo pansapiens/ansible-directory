@@ -1,0 +1,5 @@
+- name: Install Nvidia video driver
+  apt: pkg={{item}} state=present
+  with_items:
+    - nvidia-361
+    - nvidia-361-dev

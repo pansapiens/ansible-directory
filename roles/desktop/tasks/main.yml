@@ -1,17 +1,8 @@
 ---
 # tasks file for desktop
 
-# This gets the equivalent upstream Ubuntu release name on Mint (eg xenial instead of sarah)
-# NOTE: Since type=properties seems broken on the latest dev version of Ansible,
-#       we have hard coded 'sarah'='xenial' below
-#- set_fact: ubuntu_release="{{ lookup('ini', 'UBUNTU_CODENAME type=properties file=/etc/os-release') }}"
-#  when: ansible_lsb.id == 'LinuxMint'
-
-- set_fact: ubuntu_release="xenial"
-  when: (ansible_lsb.id == 'LinuxMint') and (ansible_lsb.codename == 'sarah')
-
-- set_fact: ubuntu_release="{{ansible_distribution_release}}"
-  when: ansible_lsb.id == 'Ubuntu'
+- include: find-ubuntu-flavor.yml
+  tags: [always]
 
 # Add repos
 - name: Add multiverse repo
@@ -33,12 +24,6 @@
 - name: Add Ubuntu Make PPA
 # apt_repository: repo='ppa:ubuntu-desktop/ubuntu-make'
   command: apt-add-repository -y ppa:ubuntu-desktop/ubuntu-make
-
-- name: Add Dropbox repo key
-  apt_key: keyserver=pgp.mit.edu id=5044912E
-
-- name: Add Dropbox repo
-  apt_repository: repo='deb http://linux.dropbox.com/ubuntu {{ ubuntu_release }} main' state=present filename='dropbox'
 
 - name: Add Google repo key
   apt_key: url=https://dl.google.com/linux/linux_signing_key.pub
@@ -80,6 +65,9 @@
     - virtualenvwrapper
     - ubuntu-make
     - vim
+    - htop
+    - byobu
+    - ipython
     - at
     - aria2
     - microcode.ctl
@@ -88,6 +76,19 @@
     - python-dev
     - python3-dev
     - curl
+    - ncftp
+    - nmap
+    - gedit
+    - xrdp
+    - runc
+    - speedtest-cli
+    - golang-go
+# TODO: Split TOR stuff into it's own task
+    - tor
+    - torsocks
+    - torbrowser-launcher
+    - socat
+    - tor-geoipdb
 
 - name: Install desktop packages
   apt: pkg={{item}} state=present
@@ -123,20 +124,12 @@
 #  with_items:
 #    - steam
 
-- name: Accept Steam license
-  debconf: name=steam question='steam/question' value='I AGREE' vtype='select'
-
-- name: Accept Steam license (part 2)
-  debconf: name=steam question='steam/license' value='' vtype='note'
-
-- name: Install latest Steam
-  apt: deb=https://steamcdn-a.akamaihd.net/client/installer/steam.deb
-
-- name: Install Nvidia video driver
-  apt: pkg={{item}} state=present
-  with_items:
-    - nvidia-361
-    - nvidia-361-dev
+# TODO: Need to deal with some interactive dpkg-configure options here
+#       before we can automatically install this.
+#- name: Install localepurge
+#  apt: pkg={{item}} state=present
+#  with_items:
+#    - localepurge
 
 - name: Install the 'grin' tool
   pip: name=grin state=latest
@@ -170,14 +163,6 @@
   with_items:
     - ubuntu-make
 
-# Not doing this since the non-standard Mono seems to break some things sometimes
-# Mono
-# sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-# - apt_key: keyserver=keyserver.ubuntu.com id=3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-# echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
-# sudo apt-get update
-# sudo apt-get install mono-complete
-
 # - name: Install Google Chrome
 #   command: wget -O /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; dpkg -i /tmp/google-chrome-stable_current_amd64.deb
 
@@ -190,12 +175,6 @@
   apt: pkg={{item}} allow_unauthenticated=true state=present
   with_items:
     - spotify-client
-
-- name: Install Dropbox
-  apt: pkg={{item}} state=present
-  with_items:
-    - python-gpgme
-    - dropbox
 
 - name: Install Google Talk Plugin
   apt: pkg={{item}} state=present
@@ -211,10 +190,56 @@
         mode="u+rwx,o-rwx"
   when: programs_folder.stat.exists == False
 
-- include: docker.yml
+- include: rstudio.yml
+  tags: [rstudio, rlang]
+
+- include: deluge.yml
+  tags: [torrents, deluge]
+
+- include: nvidia-video-driver.yml
+  tags: [gaming, nvidia]
+
+- include: steam.yml
+  tags: [gaming, steam]
+
+- include: itchio.yml
+  tags: [gaming, itchio]
+
 - include: pycharm-professional-umake.yml
+  tags: [dev, pycharm]
+
 - include: visual-studio-code-deb.yml
+  tags: [dev, vscode]
+
 - include: smartgit.yml
+  tags: [dev, smartgit]
+
+- include: gitkraken.yml
+  tags: [dev, gitkraken]
+
 - include: terminal_theme.yml
+# - include: erlang-elixir.yml
 # - include: crashplan.yml
-# - include: firefox-developer-edition-umake.yml
+
+- include: firefox-developer-edition-umake.yml
+  tags: [dev, firefox]
+
+# - include: jetbrains-toolbox.yml
+- include: dropbox.yml
+  tags: [dropbox]
+
+- include: openshot.yml
+  tags: [video, openshot]
+
+- include: etcher.yml
+  tags: [etcher]
+
+# - include: docker.yml
+
+# - include: mono-xamarin.yml
+# - incliude: dotnet-core.yml
+
+# Add line:
+# PATH=$PATH:${HOME}/.local/bin
+# to ~/.bashrc for the main_user
+# if not present
