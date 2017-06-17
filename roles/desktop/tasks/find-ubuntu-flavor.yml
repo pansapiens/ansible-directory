@@ -1,0 +1,32 @@
+# This gets the equivalent upstream Ubuntu release name on Mint (eg xenial instead of sarah)
+# NOTE: Since type=properties seems broken on the latest dev version of Ansible,
+#       we have hard coded 'sarah'='xenial' below
+#- set_fact: ubuntu_release="{{ lookup('ini', 'UBUNTU_CODENAME type=properties file=/etc/os-release') }}"
+#  when: ansible_lsb.id == 'LinuxMint'
+
+- set_fact: ubuntu_release="{{ansible_distribution_release}}"
+  when: ansible_lsb.id == 'Ubuntu'
+
+# Map Linux Mint release names to equivalent Ubuntu name
+- set_fact: ubuntu_release="{{ ansible_distribution_release }}"
+
+- set_fact: ubuntu_release="trusty"
+  when: (ansible_lsb.id == 'LinuxMint') and (ansible_lsb.codename == 'qiana')
+
+- set_fact: ubuntu_release="trusty"
+  when: (ansible_lsb.id == 'LinuxMint') and (ansible_lsb.codename == 'rebecca')
+
+- set_fact: ubuntu_release="trusty"
+  when: (ansible_lsb.id == 'LinuxMint') and (ansible_lsb.codename == 'rafaela')
+
+- set_fact: ubuntu_release="trusty"
+  when: (ansible_lsb.id == 'LinuxMint') and (ansible_lsb.codename == 'rosa')
+
+- set_fact: ubuntu_release="xenial"
+  when: (ansible_lsb.id == 'LinuxMint') and (ansible_lsb.codename == 'sarah')
+
+- set_fact: ubuntu_release="xenial"
+  when: (ansible_lsb.id == 'LinuxMint') and (ansible_lsb.codename == 'serena')
+
+- set_fact: ubuntu_release="xenial"
+  when: (ansible_lsb.id == 'LinuxMint') and (ansible_lsb.codename == 'sonya')

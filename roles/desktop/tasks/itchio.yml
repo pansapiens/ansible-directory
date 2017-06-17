@@ -1,0 +1,14 @@
+- name: Install itcho repo GPG key
+  apt_key:
+    url="https://dl.itch.ovh/archive.key"
+    state=present
+
+- name: Add the itchio Debian repos
+  apt_repository:
+    repo="deb https://dl.bintray.com/itchio/deb {{ ubuntu_release }} main"
+    state=present
+    filename="itchio"
+    update_cache=yes
+
+- name: Install Itch.io client
+  apt: pkg=itch state=present

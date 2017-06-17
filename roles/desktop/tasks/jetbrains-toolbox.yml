@@ -1,0 +1,11 @@
+
+- name: Download Jetbrains toolbox
+  get_url: url="https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{jetbrains_toolbox_version}}.tar.gz"
+           dest=/tmp/jetbrains-toolbox.tar.gz
+
+# TODO: Uncompress to programs.
+#       Link to 'start' menu somehow
+
+- name: Uncompress Jetbrains toolbox package
+  unarchive: src=/tmp/jetbrains-toolbox.tar.gz
+             dest=/home/{{main_user}}/programs/jetbrains_toolbox
