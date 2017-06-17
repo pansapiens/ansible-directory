@@ -1,5 +1,6 @@
 # here we assign variables to particular groups
 
 main_user: perry
-smartgit_version: 7_1_4
+smartgit_version: 8_0_4
+smartgit_checksum: "sha256:03d8358b09d722de195678e68f444d7294b476c431b9ef185e927084a2dc91d5"
 crashplan_version: 4.7.0

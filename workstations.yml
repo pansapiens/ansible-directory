@@ -1,9 +1,20 @@
 # This is the playbook to configure workstation(s)
 ---
+
 - name: apply common configuration to workstations
   hosts: workstations
   user: root
 
   roles:
+#    - role: jnv.unattended-upgrades
+#      unattended_origins_patterns:
+#        - 'origin=Linuxmint,archive=serena-main'
+#        - 'origin=Linuxmint,archive=serena-upstream'
+#        - 'origin=Ubuntu,archive=xenial-security'
+#        - 'origin=Ubuntu,archive=xenial-updates'
+    - role: angstwad.docker_ubuntu
+#      apt_repository: deb https://apt.dockerproject.org/repo ubuntu-{{ ubuntu_release|lower }} main
+      apt_repository: deb https://apt.dockerproject.org/repo ubuntu-xenial main
     - common
     - desktop
+
