@@ -5,29 +5,29 @@ point for your own preferred setup ... then great !
 
 This repo is based on this skeleton Ansible setup: https://github.com/mattjbarlow/ansible-directory
 
-# Installing Ansible #
+# Installing Ansible in a virtualenv #
 
 ```
 sudo apt install python-pip python-setuptools virtualenv libffi-dev libssl-dev git
 
-sudo pip install -U pip
-
-# Stable version from pip
-sudo pip install -U ansible
-```
-
-## Alternative: Use the latest dev version from Github inside a virtualenv
-
-```
 virtualenv ~/.virtualenvs/ansible
 source ~/.virtualenvs/ansible/bin/activate
-pip install -U git+git://github.com/ansible/ansible.git@devel
+pip install -U pip
+pip install -U ansible
+# Or, use the latest dev version of Ansible from Github
+# pip install -U git+git://github.com/ansible/ansible.git@devel
 ```
 
 # Running the workstation playbook against localhost #
 
 ```
 ansible-playbook -K -b -c local -i workstations workstations.yml
+```
+
+# Running the workstation playbook against localhost #
+
+```
+ansible-playbook -b -c local -i workstations workstations.yml
 ```
 
 # Adding a new role #
