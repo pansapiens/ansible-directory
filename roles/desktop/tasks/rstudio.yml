@@ -5,19 +5,23 @@
            state=present
 
 - name: Add RStudio repo
-  apt_repository: repo='deb http://cran.ms.unimelb.edu.au/bin/linux/ubuntu xenial/'
+  apt_repository: repo='deb {{ cran_mirror }}/bin/linux/ubuntu xenial/'
                   state=present
                   filename='r-lang'
-                  update_cache=yes
+
+#- name: Update APT cache
+#  apt: update_cache=yes
+
+- include: delete-apt-cache-hack.yml
 
 - name: Install R
-  apt: name={{item}} state=latest
+  apt: name={{item}} update_cache=yes state=latest
   with_items:
     - r-base
     - r-base-dev
 
 - name: Install RStudio DEB package
-  apt: deb="https://download1.rstudio.org/rstudio-{{rstudio_version}}-amd64.deb"
+  apt: deb="https://download1.rstudio.org/rstudio-{{ rstudio_version }}-amd64.deb"
        # checksum={{rstudio_checksum}}
   become: yes
   ignore_errors: yes

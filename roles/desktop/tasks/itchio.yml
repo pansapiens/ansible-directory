@@ -8,7 +8,12 @@
     repo="deb https://dl.bintray.com/itchio/deb {{ ubuntu_release }} main"
     state=present
     filename="itchio"
-    update_cache=yes
+
+# sudo apt-get update
+#- name: Update APT cache
+#  apt: update_cache=yes
+
+- include: delete-apt-cache-hack.yml
 
 - name: Install Itch.io client
-  apt: pkg=itch state=present
+  apt: pkg=itch update_cache=yes state=present

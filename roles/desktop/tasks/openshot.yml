@@ -6,8 +6,10 @@
                   codename='{{ ubuntu_release }}'
   # command: apt-add-repository -y ppa:openshot.developers/ppa
 
-- name: Update APT cache
-  apt: update_cache=yes
+#- name: Update APT cache
+#  apt: update_cache=yes
+
+- include: delete-apt-cache-hack.yml
 
 - name: Install Openshot
   apt: pkg={{item}} state=present

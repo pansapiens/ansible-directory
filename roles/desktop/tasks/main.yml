@@ -132,21 +132,9 @@
 #    - localepurge
 
 - name: Install the 'grin' tool
+  tags: [dev]
   pip: name=grin state=latest
   become: true
-
-- name: Add proper Node.js v6.x to repo list
-  shell: curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-
-- name: Install proper Node.js v6.x
-  apt: pkg=nodejs state=present
-
-- name: Make nodejs binary 'node' rather than 'nodejs'
-  # sudo update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
-  alternatives: name=node
-                link=/usr/bin/node
-                path=/usr/bin/nodejs
-                priority=10
 
 - name: Accept Oracle Java license
   debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
@@ -159,6 +147,7 @@
     - oracle-java8-set-default
 
 - name: Install Ubuntu Make from PPA
+  tags: [dev]
   apt: pkg={{item}} state=present
   with_items:
     - ubuntu-make
@@ -167,11 +156,13 @@
 #   command: wget -O /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; dpkg -i /tmp/google-chrome-stable_current_amd64.deb
 
 - name: Install Googe Chrome (stable)
+  tags: [browser]
   apt: pkg={{item}} state=present
   with_items:
     - google-chrome-stable
 
 - name: Install Spotify
+  tags: [music]
   apt: pkg={{item}} allow_unauthenticated=true state=present
   with_items:
     - spotify-client
@@ -189,6 +180,12 @@
         state=directory
         mode="u+rwx,o-rwx"
   when: programs_folder.stat.exists == False
+
+- include: pypy.yml
+  tags: [dev, pypy, python]
+
+- include: nodejs.yml
+  tags: [dev, nodejs]
 
 - include: rstudio.yml
   tags: [rstudio, rlang]
@@ -211,8 +208,8 @@
 - include: visual-studio-code-deb.yml
   tags: [dev, vscode]
 
-- include: smartgit.yml
-  tags: [dev, smartgit]
+#- include: smartgit.yml
+#  tags: [dev, smartgit]
 
 - include: gitkraken.yml
   tags: [dev, gitkraken]
@@ -222,7 +219,7 @@
 # - include: crashplan.yml
 
 - include: firefox-developer-edition-umake.yml
-  tags: [dev, firefox]
+  tags: [dev, firefox, browser]
 
 # - include: jetbrains-toolbox.yml
 - include: dropbox.yml
@@ -234,7 +231,12 @@
 - include: etcher.yml
   tags: [etcher]
 
+# No longer required, using Galaxy role angstwad.docker_ubuntu instead
 # - include: docker.yml
+
+# sudo usermod -aG docker $USER
+- name: Add primary user to the 'docker' group
+  user: name={{main_user}} groups=docker append=yes
 
 # - include: mono-xamarin.yml
 # - incliude: dotnet-core.yml

@@ -10,6 +10,7 @@
 
 - name: Install Firefox Developer Edition via Ubuntu Make
   shell: umake web firefox-dev --lang en-US /home/{{main_user}}/programs/firefox-dev
+  become: "{{ main_user }}"
   when: firefoxdev_directory.stat.exists == False
 
 # - name: Remove system copy of Firefox

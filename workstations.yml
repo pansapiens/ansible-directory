@@ -6,6 +6,7 @@
   user: root
 
   roles:
+    - common
 #    - role: jnv.unattended-upgrades
 #      unattended_origins_patterns:
 #        - 'origin=Linuxmint,archive=serena-main'
@@ -15,6 +16,6 @@
     - role: angstwad.docker_ubuntu
 #      apt_repository: deb https://apt.dockerproject.org/repo ubuntu-{{ ubuntu_release|lower }} main
       apt_repository: deb https://apt.dockerproject.org/repo ubuntu-xenial main
-    - common
     - desktop
-
+#    - role: lutangar.ansible-role-steamcmd
+#      steamcmd_create_user: false

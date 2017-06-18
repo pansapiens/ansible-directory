@@ -1,0 +1,20 @@
+---
+
+- name: Add proper Node.js v8.x to repo list
+  shell: curl -sL curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+
+# sudo apt-get update
+#- name: Update APT cache
+#  apt: update_cache=yes
+
+- include: delete-apt-cache-hack.yml
+
+- name: Install proper Node.js v8.x
+  apt: pkg=nodejs state=present
+
+- name: Make nodejs binary 'node' rather than 'nodejs'
+  # sudo update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
+  alternatives: name=node
+                link=/usr/bin/node
+                path=/usr/bin/nodejs
+                priority=10
