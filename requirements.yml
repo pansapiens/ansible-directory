@@ -4,4 +4,5 @@
 # Python graph-tool
 - src: nlap.graph_tool
 # - src: lutangar.ansible-role-steamcmd
-
+# - src: ansible-role-singularity
+- src: ryanolson.singularity

@@ -5,3 +5,7 @@
 - name: Hack to resolve problem with Ansible apt update - manually purge apt cache
   sudo: true
   shell: 'find /var/lib/apt/lists -maxdepth 1 -type f -exec rm -v {} \;'
+
+# sudo apt-get update
+#- name: Update APT cache
+#  apt: update_cache=yes

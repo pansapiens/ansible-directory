@@ -16,6 +16,8 @@
     - role: angstwad.docker_ubuntu
 #      apt_repository: deb https://apt.dockerproject.org/repo ubuntu-{{ ubuntu_release|lower }} main
       apt_repository: deb https://apt.dockerproject.org/repo ubuntu-xenial main
+#    - role: ansible-role-singularity
+    - role: ryanolson.singularity
     - desktop
 #    - role: lutangar.ansible-role-steamcmd
 #      steamcmd_create_user: false
