@@ -1,0 +1,16 @@
+- name: Add Gnome3 PPA repo key
+  apt_key: id='3B1510FD' keyserver='keyserver.ubuntu.com'
+
+- name: Add Gnome3 PPA
+  apt_repository: repo='ppa:gnome3-team/gnome3'
+                  codename='{{ ubuntu_release }}'
+
+- name: Add Gnome3 Staging PPA
+  apt_repository: repo='ppa:gnome3-team/gnome3-staging'
+                  codename='{{ ubuntu_release }}'
+
+- name: Install Gnome Shell (Gnome3)
+  apt: pkg={{item}} state=present update_cache=yes
+  with_items:
+    - gnome
+    - gnome-shell

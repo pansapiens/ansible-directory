@@ -10,11 +10,7 @@
     filename='dropbox'
     state=present
 
-# sudo apt-get update
-#- name: Update APT cache
-#  apt: update_cache=yes
-
-- include: delete-apt-cache-hack.yml
+#- include: delete-apt-cache-hack.yml
 
 - name: Install Dropbox
   apt: pkg={{item}} update_cache=yes state=present

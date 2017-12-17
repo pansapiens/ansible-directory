@@ -1,0 +1,41 @@
+---
+# Add repos
+- name: Add multiverse repo
+  apt_repository: repo="{{item}}" update_cache=false
+  when: ansible_distribution == 'Ubuntu'
+  with_items:
+    - 'deb http://archive.ubuntu.com/ubuntu {{ubuntu_release}} multiverse'
+    - 'deb-src http://archive.ubuntu.com/ubuntu {{ubuntu_release}} multiverse'
+    - 'deb http://archive.ubuntu.com/ubuntu {{ubuntu_release}}-updates multiverse'
+    - 'deb-src http://archive.ubuntu.com/ubuntu {{ubuntu_release}}-updates multiverse'
+
+- name: Add Canonical Archive Repo
+  apt_repository: repo='deb http://archive.canonical.com/ {{ ubuntu_release }} partner' state=present filename='canonical-archive'
+
+- name: Add Java PPA (ppa:webupd8team/java)
+#  apt_repository: repo='ppa:webupd8team/java'
+  command: apt-add-repository -y ppa:webupd8team/java
+
+- name: Add Ubuntu Make PPA
+# apt_repository: repo='ppa:ubuntu-desktop/ubuntu-make'
+  command: apt-add-repository -y ppa:ubuntu-desktop/ubuntu-make
+
+- name: Add Google repo key
+  apt_key: url=https://dl.google.com/linux/linux_signing_key.pub
+
+- name: Add Google Chrome repo
+  apt_repository: repo='deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' state=present filename='google-chrome'
+
+- name: Add Google Talk Plugin repo
+  apt_repository: repo='deb http://dl.google.com/linux/talkplugin/deb/ stable main' state=present filename='google-talkplugin'
+
+- name: Add Spotify repo
+  apt_repository: repo='deb http://repository.spotify.com stable non-free' state=present filename='spotify'
+
+- name: Add Firefox Aurora (Developer Edition) PPA (ppa:ubuntu-mozilla-daily/firefox-aurora)
+# apt_repository: repo='ppa:ubuntu-mozilla-daily/firefox-aurora'
+  command: apt-add-repository -y ppa:ubuntu-mozilla-daily/firefox-aurora
+
+
+- name: Update APT cache
+  apt: update_cache=yes cache_valid_time=3600

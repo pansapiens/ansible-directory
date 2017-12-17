@@ -9,11 +9,7 @@
     state=present
     filename="itchio"
 
-# sudo apt-get update
-#- name: Update APT cache
-#  apt: update_cache=yes
-
-- include: delete-apt-cache-hack.yml
+# - include: delete-apt-cache-hack.yml
 
 - name: Install Itch.io client
   apt: pkg=itch update_cache=yes state=present

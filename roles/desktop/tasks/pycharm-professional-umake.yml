@@ -11,3 +11,4 @@
 - name: Install PyCharm Professional via Ubuntu Make
   shell: umake ide pycharm-professional /home/{{main_user}}/programs/pycharm-professional
   when: pycharm_directory.stat.exists == False
+  become: "{{main_user}}"

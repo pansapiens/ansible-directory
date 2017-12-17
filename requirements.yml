@@ -1,8 +1,12 @@
 - src: jnv.unattended-upgrades
+
 # - src: andrewrothstein.docker
+
 - src: angstwad.docker_ubuntu
+  version: v3.3.3
+
 # Python graph-tool
 - src: nlap.graph_tool
 # - src: lutangar.ansible-role-steamcmd
 # - src: ansible-role-singularity
-- src: ryanolson.singularity
+# - src: ryanolson.singularity

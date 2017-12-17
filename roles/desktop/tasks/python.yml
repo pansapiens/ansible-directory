@@ -1,0 +1,11 @@
+---
+- name: Install Python & associated tools
+  apt: pkg={{item}} state=present update_cache=yes
+  with_items:
+    - python-pip
+    - python3-pip
+    - python-virtualenv
+    - python3-virtualenv
+    - python-dev
+    - python3-dev
+    - virtualenvwrapper

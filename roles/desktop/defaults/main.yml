@@ -1,3 +1,9 @@
 ---
 # defaults file for desktop
 ubuntu_release: xenial
+
+cran_mirror: "http://mirror.aarnet.edu.au/pub/CRAN"
+smartgit_version: 8_0_4
+smartgit_checksum: "sha256:03d8358b09d722de195678e68f444d7294b476c431b9ef185e927084a2dc91d5"
+crashplan_version: 4.8.3
+rstudio_version: 1.0.143

@@ -1,45 +1,10 @@
 ---
 # tasks file for desktop
 
-- include: find-ubuntu-flavor.yml
+- include_tasks: find-ubuntu-flavor.yml
   tags: [always]
 
-# Add repos
-- name: Add multiverse repo
-  apt_repository: repo="{{item}}" update_cache=false
-  when: ansible_distribution == 'Ubuntu'
-  with_items:
-    - 'deb http://archive.ubuntu.com/ubuntu {{ubuntu_release}} multiverse'
-    - 'deb-src http://archive.ubuntu.com/ubuntu {{ubuntu_release}} multiverse'
-    - 'deb http://archive.ubuntu.com/ubuntu {{ubuntu_release}}-updates multiverse'
-    - 'deb-src http://archive.ubuntu.com/ubuntu {{ubuntu_release}}-updates multiverse'
-
-- name: Add Canonical Archive Repo
-  apt_repository: repo='deb http://archive.canonical.com/ {{ ubuntu_release }} partner' state=present filename='canonical-archive'
-
-- name: Add Java PPA (ppa:webupd8team/java)
-#  apt_repository: repo='ppa:webupd8team/java'
-  command: apt-add-repository -y ppa:webupd8team/java
-
-- name: Add Ubuntu Make PPA
-# apt_repository: repo='ppa:ubuntu-desktop/ubuntu-make'
-  command: apt-add-repository -y ppa:ubuntu-desktop/ubuntu-make
-
-- name: Add Google repo key
-  apt_key: url=https://dl.google.com/linux/linux_signing_key.pub
-
-- name: Add Google Chrome repo
-  apt_repository: repo='deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' state=present filename='google-chrome'
-
-- name: Add Google Talk Plugin repo
-  apt_repository: repo='deb http://dl.google.com/linux/talkplugin/deb/ stable main' state=present filename='google-talkplugin'
-
-- name: Add Spotify repo
-  apt_repository: repo='deb http://repository.spotify.com stable non-free' state=present filename='spotify'
-
-- name: Add Firefox Aurora (Developer Edition) PPA (ppa:ubuntu-mozilla-daily/firefox-aurora)
-# apt_repository: repo='ppa:ubuntu-mozilla-daily/firefox-aurora'
-  command: apt-add-repository -y ppa:ubuntu-mozilla-daily/firefox-aurora
+- include_tasks: repositories.yml
 
 #####
 
@@ -50,7 +15,7 @@
   apt: upgrade=safe
 
 - name: Install base development/server packages
-  apt: pkg={{item}} state=present
+  apt: pkg={{item}} state=present update_cache=yes
   with_items:
     - mosh
     - openssh-server
@@ -60,9 +25,6 @@
     - samba-vfs-modules
     - build-essential
     - git
-    - python-pip
-    - python3-pip
-    - virtualenvwrapper
     - ubuntu-make
     - vim
     - htop
@@ -73,8 +35,6 @@
     - microcode.ctl
     - intel-microcode
     - ppa-purge
-    - python-dev
-    - python3-dev
     - curl
     - ncftp
     - nmap
@@ -83,12 +43,12 @@
     - runc
     - speedtest-cli
     - golang-go
-# TODO: Split TOR stuff into it's own task
-    - tor
-    - torsocks
-    - torbrowser-launcher
-    - socat
-    - tor-geoipdb
+
+- include_tasks: python.yml
+  tags: [dev, python]
+
+- include_tasks: tor.yml
+  tags: [privacy, tor]
 
 - name: Install desktop packages
   apt: pkg={{item}} state=present
@@ -118,6 +78,12 @@
     - totem
     - deja-dup
     - thunderbird
+
+- include_tasks: gnome3.yml
+  tags: ['gnome3']
+
+- include_tasks: singularity-apt.yml
+  tags: ['singularity']
 
 #- name: Install Steam
 #  apt: pkg={{item}} state=present
@@ -176,69 +142,74 @@
   register: programs_folder
 
 - name: Create 'programs' dir for Ubuntu Make installations
-  file: path=/home/{{main_user}}/programs
+  file: path="/home/{{main_user}}/programs"
         state=directory
         mode="u+rwx,o-rwx"
+        owner="{{main_user}}"
   when: programs_folder.stat.exists == False
 
-- include: pypy.yml
+- include_tasks: pypy.yml
   tags: [dev, pypy, python]
 
-- include: nodejs.yml
+- include_tasks: nodejs.yml
   tags: [dev, nodejs]
 
-- include: rstudio.yml
+- include_tasks: rstudio.yml
   tags: [rstudio, rlang]
 
-- include: deluge.yml
+- include_tasks: deluge.yml
   tags: [torrents, deluge]
 
-- include: nvidia-video-driver.yml
+- include_tasks: nvidia-video-driver.yml
   tags: [gaming, nvidia]
 
-- include: steam.yml
+- include_tasks: steam.yml
   tags: [gaming, steam]
 
-- include: itchio.yml
+- include_tasks: itchio.yml
   tags: [gaming, itchio]
 
-- include: pycharm-professional-umake.yml
+# GetDeb only hosts the PyCharm Community Edition, not Professional
+#- include_tasks: pycharm-getdeb-repo.yml
+#  tags: [dev, pycharm]
+
+- include_tasks: pycharm-professional-umake.yml
   tags: [dev, pycharm]
 
-- include: visual-studio-code-deb.yml
+- include_tasks: visual-studio-code-deb.yml
   tags: [dev, vscode]
 
-#- include: smartgit.yml
-#  tags: [dev, smartgit]
+- include_tasks: smartgit.yml
+  tags: [dev, smartgit]
 
-- include: gitkraken.yml
+- include_tasks: gitkraken.yml
   tags: [dev, gitkraken]
 
-- include: terminal_theme.yml
-# - include: erlang-elixir.yml
-# - include: crashplan.yml
+- include_tasks: terminal_theme.yml
+# - include_tasks: erlang-elixir.yml
+# - include_tasks: crashplan.yml
 
-- include: firefox-developer-edition-umake.yml
+- include_tasks: firefox-developer-edition-umake.yml
   tags: [dev, firefox, browser]
 
-# - include: jetbrains-toolbox.yml
-- include: dropbox.yml
+# - include_tasks: jetbrains-toolbox.yml
+- include_tasks: dropbox.yml
   tags: [dropbox]
 
-- include: openshot.yml
+- include_tasks: openshot.yml
   tags: [video, openshot]
 
-- include: etcher.yml
+- include_tasks: etcher.yml
   tags: [etcher]
 
 # No longer required, using Galaxy role angstwad.docker_ubuntu instead
-# - include: docker.yml
+# - include_tasks: docker.yml
 
 # sudo usermod -aG docker $USER
 - name: Add primary user to the 'docker' group
   user: name={{main_user}} groups=docker append=yes
 
-# - include: mono-xamarin.yml
+# - include_tasks: mono-xamarin.yml
 # - incliude: dotnet-core.yml
 
 # Add line:

@@ -10,14 +10,10 @@
                   state=present
                   filename='etcher'
 
-# sudo apt-get update
-#- name: Update APT cache
-#  apt: update_cache=yes
-
-- include: delete-apt-cache-hack.yml
+# - include: delete-apt-cache-hack.yml
 
 # sudo apt-get install etcher-electron
 - name: Install Etcher
-  apt: pkg={{item}} state=present
+  apt: pkg={{item}} state=present update_cache=yes
   with_items:
     - etcher-electron
