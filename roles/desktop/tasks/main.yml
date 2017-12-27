@@ -159,9 +159,11 @@
 
 - include_tasks: nvidia-video-driver.yml
   tags: [gaming, nvidia]
+  when: ansible_virtualization_role != 'guest' and ansible_virtualization_type != 'virtualbox'
 
 - include_tasks: steam.yml
   tags: [gaming, steam]
+  when: ansible_virtualization_role != 'guest' and ansible_virtualization_type != 'virtualbox'
 
 - include_tasks: itchio.yml
   tags: [gaming, itchio]
