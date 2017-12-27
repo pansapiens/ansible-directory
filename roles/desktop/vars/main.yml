@@ -2,6 +2,7 @@
 # vars file for desktop
 
 main_user: perry
+<<<<<<< HEAD
 smartgit_version: 8_0_4
 smartgit_checksum: "sha256:03d8358b09d722de195678e68f444d7294b476c431b9ef185e927084a2dc91d5"
 crashplan_version: 4.7.0
@@ -9,3 +10,8 @@ jetbrains_toolbox_version: 1.1.2143
 cran_mirror: "http://mirror.aarnet.edu.au/pub/CRAN"
 rstudio_version: 1.0.143
 # rstudio_checksum: 2a73b88a12a9fbaf96251cecf8b41340
+=======
+smartgit_version: 7_1_4
+smartgit_checksum: sha1:0fe66599da686ac6c525816c9cc5199a52de8538
+crashplan_version: 4.7.0
+>>>>>>> master
