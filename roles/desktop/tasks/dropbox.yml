@@ -6,14 +6,12 @@
 
 - name: Add Dropbox repo
   apt_repository:
-    repo='deb http://linux.dropbox.com/ubuntu xenial main'
+    repo='deb http://linux.dropbox.com/ubuntu {{ubuntu_release_lts}} main'
     filename='dropbox'
     state=present
 
-#- include: delete-apt-cache-hack.yml
-
 - name: Install Dropbox
-  apt: pkg={{item}} update_cache=yes state=present
+  apt: pkg={{item}} update_cache=yes cache_valid_time=3600 state=present
   with_items:
     - python-gpgme
     - dropbox

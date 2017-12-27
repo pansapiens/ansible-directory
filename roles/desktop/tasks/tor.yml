@@ -1,7 +1,7 @@
 ---
 
 - name: Install Tor pacakges
-  apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg={{item}} state=present update_cache=yes cache_valid_time=3600
   with_items:
     - tor
     - torsocks

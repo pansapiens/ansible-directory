@@ -1,0 +1,16 @@
+---
+- name: Add Google repo key
+  apt_key: url=https://dl.google.com/linux/linux_signing_key.pub
+  
+- name: Add Google Talk Plugin repo
+  apt_repository: repo='deb http://dl.google.com/linux/talkplugin/deb/ stable main' state=present filename='google-talkplugin'
+#  when: ubuntu_release != 'artful'
+
+- name: Update APT cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install Google Talk Plugin
+  tags: [googletalk]
+  apt: pkg={{item}} state=present
+  with_items:
+    - google-talkplugin

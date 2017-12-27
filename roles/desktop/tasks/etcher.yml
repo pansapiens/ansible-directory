@@ -7,6 +7,7 @@
 # sudo echo "deb https://dl.bintray.com/resin-io/debian stable etcher" >/etc/apt/sources.list.d/etcher.list
 - name: Add Etcher repo
   apt_repository: repo='deb https://dl.bintray.com/resin-io/debian stable etcher'
+                  codename='{{ubuntu_release_lts}}'
                   state=present
                   filename='etcher'
 
@@ -14,6 +15,6 @@
 
 # sudo apt-get install etcher-electron
 - name: Install Etcher
-  apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg={{item}} state=present update_cache=yes cache_valid_time=3600
   with_items:
     - etcher-electron

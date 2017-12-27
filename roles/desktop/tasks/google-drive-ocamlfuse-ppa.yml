@@ -1,0 +1,14 @@
+---
+- name: Add google-drive-ocamlfuse ppa repo key
+  apt_key: id='F639B041' keyserver='keyserver.ubuntu.com'
+
+- name: Add google-drive-ocamlfuse PPA
+  apt_repository: repo='ppa:alessandro-strada/ppa'
+#                  codename='{{ ubuntu_release_lts }}'
+
+# - include: delete-apt-cache-hack.yml
+
+- name: Install google-drive-ocamlfuse
+  apt: pkg={{item}} state=present update_cache=yes cache_valid_time=3600
+  with_items:
+    - google-drive-ocamlfuse

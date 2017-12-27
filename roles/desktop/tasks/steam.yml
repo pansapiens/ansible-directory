@@ -8,4 +8,4 @@
   apt: deb=https://steamcdn-a.akamaihd.net/client/installer/steam.deb
 
 - name: Install steamcmd
-  apt: pkg=steamcmd update_cache=yes state=present
+  apt: pkg=steamcmd update_cache=yes cache_valid_time=3600 state=present

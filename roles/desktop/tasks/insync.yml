@@ -1,0 +1,14 @@
+---
+- name: Add Insync repo key
+  apt_key: id='ACCAF35C' keyserver='keyserver.ubuntu.com'
+
+- name: Add Insync repo
+  apt_repository: repo='deb http://apt.insynchq.com/ubuntu {{ubuntu_release}} non-free contrib'
+                  filename='insync'
+
+# - include: delete-apt-cache-hack.yml
+
+- name: Install Insync
+  apt: pkg={{item}} state=present update_cache=yes cache_valid_time=3600
+  with_items:
+    - insync

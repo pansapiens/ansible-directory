@@ -1,0 +1,12 @@
+---
+- name: Add Firefox Aurora (Developer Edition) PPA (ppa:ubuntu-mozilla-daily/firefox-aurora)
+  apt_repository: repo='ppa:ubuntu-mozilla-daily/firefox-aurora'
+# command: apt-add-repository -y ppa:ubuntu-mozilla-daily/firefox-aurora
+
+- name: Update APT cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install Firefox Aurora (Developer Edition)
+  apt: pkg={{item}} state=present update_cache=yes cache_valid_time=3600
+  with_items:
+    - firefox

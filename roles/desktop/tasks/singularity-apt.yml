@@ -16,8 +16,10 @@
     # repo: "deb http://mirror.aarnet.edu.au/pub/neurodebian {{ ansible_distribution_release }} main contrib non-free"
     # We force xenial even on early Ubuntu releases so we can get verson 2.4.x
     repo: "deb http://mirror.aarnet.edu.au/pub/neurodebian xenial main contrib non-free"
-    update_cache: yes
     state: present
+
+- name: Update APT cache
+  apt: update_cache=yes cache_valid_time=3600
 
 - name: Install Singularity
   apt:

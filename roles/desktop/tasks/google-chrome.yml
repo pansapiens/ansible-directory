@@ -1,0 +1,18 @@
+---
+- name: Add Google repo key
+  apt_key: url=https://dl.google.com/linux/linux_signing_key.pub
+  
+- name: Add Google Chrome repo
+  apt_repository: repo='deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' state=present filename='google-chrome'
+
+- name: Update APT cache
+  apt: update_cache=yes cache_valid_time=3600
+
+# - name: Install Google Chrome
+#   command: wget -O /tmp/google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb; dpkg -i /tmp/google-chrome-stable_current_amd64.deb
+
+- name: Install Googe Chrome (stable)
+  tags: [browser]
+  apt: pkg={{item}} state=present
+  with_items:
+    - google-chrome-stable

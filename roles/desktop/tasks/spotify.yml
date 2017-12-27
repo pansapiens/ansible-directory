@@ -1,0 +1,12 @@
+---
+- name: Add Spotify repo
+  apt_repository: repo='deb http://repository.spotify.com stable non-free' state=present filename='spotify'
+
+- name: Update APT cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install Spotify
+  tags: [music, spotify]
+  apt: pkg={{item}} allow_unauthenticated=true state=present
+  with_items:
+    - spotify-client

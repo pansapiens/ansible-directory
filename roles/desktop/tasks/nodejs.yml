@@ -6,7 +6,7 @@
 # - include: delete-apt-cache-hack.yml
 
 - name: Install proper Node.js v8.x
-  apt: pkg=nodejs state=present update_cache=yes
+  apt: pkg=nodejs state=present update_cache=yes cache_valid_time=3600
 
 - name: Make nodejs binary 'node' rather than 'nodejs'
   # sudo update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10

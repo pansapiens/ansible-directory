@@ -6,7 +6,7 @@
 # - include: delete-apt-cache-hack.yml
 
 - name: Install Erlang and Elixir
-  apt: pkg={{item}} update_cache=yes state=present
+  apt: pkg={{item}} update_cache=yes cache_valid_time=3600 state=present
   with_items:
     - esl-erlang
     - elixir

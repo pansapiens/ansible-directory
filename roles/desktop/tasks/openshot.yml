@@ -3,12 +3,12 @@
 
 - name: Add Openshot PPA
   apt_repository: repo='ppa:openshot.developers/ppa'
-                  codename='{{ ubuntu_release }}'
+                  codename='{{ ubuntu_release_lts }}'
   # command: apt-add-repository -y ppa:openshot.developers/ppa
 
 # - include: delete-apt-cache-hack.yml
 
 - name: Install Openshot
-  apt: pkg={{item}} state=present update_cache=yes
+  apt: pkg={{item}} state=present update_cache=yes cache_valid_time=3600
   with_items:
     - openshot-qt

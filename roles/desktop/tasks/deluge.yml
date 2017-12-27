@@ -1,5 +1,5 @@
 - name: Update APT cache
-  apt: update_cache=yes cache_valid_time=3600
+  apt: update_cache=yes cache_valid_time=3600 cache_valid_time=3600
 
 - name: Install base development/server packages
   apt: pkg={{item}} state=present

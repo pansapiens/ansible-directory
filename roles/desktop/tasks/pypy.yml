@@ -4,14 +4,14 @@
 
 # sudo add-apt-repository ppa:pypy/ppa
 - name: Add PyPy PPA
-#  apt_repository: repo='ppa:pypy/ppa'
-#                  codename='{{ ubuntu_release }}'
-  command: apt-add-repository -y ppa:pypy/ppa
+  apt_repository: repo='ppa:pypy/ppa' codename='{{ ubuntu_release_lts }}'
+                  # codename='{{ ubuntu_release }}'
+ #command: apt-add-repository -y ppa:pypy/ppa
 
-# - include: delete-apt-cache-hack.yml
+# - include_tasks: delete-apt-cache-hack.yml
 
 # sudo apt-get install pypy
 - name: Install PyPy
-  apt: pkg={{item}} update_cache=yes state=present
+  apt: pkg={{item}} update_cache=yes cache_valid_time=3600 state=present
   with_items:
     - pypy
