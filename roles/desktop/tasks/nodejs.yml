@@ -14,3 +14,33 @@
                 link=/usr/bin/node
                 path=/usr/bin/nodejs
                 priority=10
+
+- name: Install nvm as {{main_user}}
+  shell: "curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{nvm_version}}/install.sh | bash"
+  become_user: "{{main_user}}"
+
+- name: Add NVM_HOME to /home/{{main_user}}/.profile
+  lineinfile:
+    path: "/home/{{main_user}}/.profile"
+    line: 'export NVM_DIR="$HOME/.nvm"'
+  become_user: "{{main_user}}"
+
+- name: Add source ~/.nvm/nvm.sh in /home/{{main_user}}/.profile
+  lineinfile:
+    path: "/home/{{main_user}}/.profile"
+    line: '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"]'
+  become_user: "{{main_user}}"
+
+# Global install - probably not what you want really
+#
+#- name: Install nvm (globally in /usr/local/nvm)
+#  shell: "curl -o- https://raw.githubusercontent.com/creationix/nvm/v{{nvm_version}}/install.sh | NVM_DIR=/usr/local/nvm bash"
+#
+#- name: Add NVM_HOME to /home/{{main_user}}/.profile
+#  lineinfile:
+#    path: "/home/{{main_user}}/.profile"
+#    line: 'export NVM_DIR="/usr/local/nvm"'
+#- name: Add source ~/.nvm/nvm.sh in /home/{{main_user}}/.profile
+#  lineinfile:
+#    path: "/home/{{main_user}}/.profile"
+#    line: '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"]'
