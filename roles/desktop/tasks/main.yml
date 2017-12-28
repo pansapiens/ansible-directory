@@ -100,7 +100,7 @@
 
 - include_tasks: gnome3.yml
   tags: [gnome3]
-  when: ubuntu_release != 'artful'
+  when: (ansible_distribution == 'Ubuntu') and (ansible_distribution_version|float < 17.10)
 
 - include_tasks: singularity-apt.yml
   tags: [singularity]
