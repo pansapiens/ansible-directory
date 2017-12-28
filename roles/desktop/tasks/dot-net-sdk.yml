@@ -1,0 +1,13 @@
+---
+- name: Add .NET SDK repo
+  apt_repository: repo='deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-{{ubuntu_release}}-prod xenial main'
+                  state=present
+                  filename='dot-net-sdk'
+
+- name: Update APT cache
+  apt: update_cache=yes cache_valid_time=3600
+
+- name: Install .NET SDK
+  apt: pkg={{item}} state=present
+  with_items:
+    - "dotnet-sdk-{{dot_net_sdk_version}}"
