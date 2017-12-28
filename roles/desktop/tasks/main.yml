@@ -55,6 +55,14 @@
     - speedtest-cli
     - golang-go
 
+- name: Install virtual machine kernel
+  apt: pkg={{item}} state=present update_cache=yes cache_valid_time=3600
+  with_items:
+    - linux-virtual
+    - linux-cloud-tools-virtual
+    - linux-tools-virtual
+  when: ansible_virtualization_role == 'guest'
+
 - include_tasks: python.yml
   tags: [dev, python]
 
